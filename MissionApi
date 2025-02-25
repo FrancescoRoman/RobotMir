@@ -1,0 +1,118 @@
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.gridlayout import GridLayout
+import requests
+
+# Configurazione API
+ip = "192.168.12.20"
+host = f"http://{ip}/api/v2.0.0/"
+headers = {
+    "Content-Type": "application/json",
+    "Authorization": "Basic aXRpc2RlbHBvenpvOjlhZDVhYjA0NDVkZTE4ZDI4Nzg0NjMzNzNkNmRiZGIxZWUzZTFmZjg2YzBhYmY4OGJiMzU5YzNkYzVmMzBiNGQ="
+}
+
+class MiRApp(App):
+    def build(self):
+        self.title = "MiR 100 Manual Control"
+        layout = BoxLayout(orientation='vertical', padding=20, spacing=10)
+        self.status_label = Label(
+            text="Stato: Pronto",
+            size_hint=(1, 0.1),
+            color=(1, 1, 1, 1),
+            font_size='20sp',
+            halign="center"
+        )
+
+        button_layout = GridLayout(cols=1, size_hint_y=None, height=200, spacing=10)
+
+        btn_get_missions = Button(
+            text="Stampa missione",
+            background_color=(0.2, 0.6, 0.8, 1),
+            size_hint=(1, None),
+            height=50,
+            on_press=self.get_missions
+        )
+
+        btn_send_mission = Button(
+            text="Missione",
+            background_color=(0.2, 0.6, 0.8, 1),
+            size_hint=(1, None),
+            height=50,
+            on_press=self.send_mission
+        )
+
+        btn_clear_queue = Button(
+            text="Clear Queue",
+            background_color=(0.8, 0.2, 0.2, 1),
+            size_hint=(1, None),
+            height=50,
+            on_press=self.clear_queue
+        )
+
+        btn_manual_control = Button(
+            text="Comandi Manuali",
+            background_color=(0.2, 0.8, 0.2, 1),
+            size_hint=(1, None),
+            height=50,
+            on_press=self.manual_control
+        )
+
+        button_layout.add_widget(btn_get_missions)
+        button_layout.add_widget(btn_send_mission)
+        button_layout.add_widget(btn_clear_queue)
+        button_layout.add_widget(btn_manual_control)
+
+        layout.add_widget(self.status_label)
+        layout.add_widget(button_layout)
+
+        return layout
+
+    def update_status(self, text):
+        self.status_label.text = f"Stato: {text}"
+
+    def get_missions(self, instance):
+        try:
+            response = requests.get(host + "missions", headers=headers)
+            response.raise_for_status()
+            self.update_status("Missioni recuperate!")
+            print(response.json())
+        except requests.RequestException as e:
+            self.update_status("Errore nel recupero missioni.")
+            print(e)
+
+    def send_mission(self, instance):
+        try:
+            mission_id = {"mission_id": "ffbe035b-0c6d-11ef-97be-00012978ebab"}
+            response = requests.post(host + "mission_queue", json=mission_id, headers=headers)
+            response.raise_for_status()
+            self.update_status("Missione inviata!")
+            print(response.json())
+        except requests.RequestException as e:
+            self.update_status("Errore nell'invio missione.")
+            print(e)
+
+    def clear_queue(self, instance):
+        try:
+            response = requests.delete(host + "mission_queue", headers=headers)
+            response.raise_for_status()
+            self.update_status("Coda cancellata!")
+            print(response.json())
+        except requests.RequestException as e:
+            self.update_status("Errore nella cancellazione della coda.")
+            print(e)
+
+ """def manual_control(self, instance):
+        try:
+            data = {"direction": "forward", "speed": 0.2}
+            response = requests.post(host + "manual_control", json=data, headers=headers)
+            response.raise_for_status()
+            self.update_status("Movimento in avanti!")
+            print(response.json())
+        except requests.RequestException as e:
+            self.update_status("Errore nel controllo manuale.")
+            print(e]"""   
+
+if __name__ == "__main__":
+    MiRApp().run()
