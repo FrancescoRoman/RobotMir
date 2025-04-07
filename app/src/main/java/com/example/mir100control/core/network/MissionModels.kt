@@ -1,4 +1,4 @@
-package com.example.mir100control.network
+package com.example.mir100control.core.network
 
 data class Mission(
     val guid: String,
@@ -8,3 +8,6 @@ data class Mission(
 data class MissionRequest(
     val mission_id: String
 )
+
+
+

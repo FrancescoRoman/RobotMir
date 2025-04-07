@@ -1,21 +1,20 @@
-package com.example.mir100control.viewmodel
+package com.example.mir100control.model
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.mir100control.network.MiRApiService
-import com.example.mir100control.network.MiRStatus
+import com.example.mir100control.core.network.MiRApiService
+import com.example.mir100control.core.network.MiRStatus
 
-import com.example.mir100control.network.Mission
-import com.example.mir100control.network.MissionRequest
-import com.example.mir100control.network.RetrofitClient
+import com.example.mir100control.core.network.Mission
+
+import com.example.mir100control.core.network.MissionRequest
+import com.example.mir100control.core.network.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MiRViewModel : ViewModel() {
+class MiRViewModel<MissionGroup> : ViewModel() {
 
     private val apiService: MiRApiService = RetrofitClient.apiService
     private val authHeader = "Basic aXRpc2RlbHBvenpvOjlhZDVhYjA0NDVkZTE4ZDI4Nzg0NjMzNzNkNmRiZGIxZWUzZTFmZjg2YzBhYmY4OGJiMzU5YzNkYzVmMzBiNGQ="
@@ -54,6 +53,17 @@ class MiRViewModel : ViewModel() {
             }
         })
     }
+
+
+
+    private val _missionGroups = MutableLiveData<List<MissionGroup>>()
+    val missionGroups: LiveData<List<MissionGroup>> = _missionGroups
+
+
+
+
+
+
 
     fun getMissions() {
         apiService.getMissions(authHeader).enqueue(object : Callback<List<Mission>> {
@@ -106,4 +116,3 @@ class MiRViewModel : ViewModel() {
         })
     }
 }
-

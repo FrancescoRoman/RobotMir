@@ -54,7 +54,7 @@ dependencies {
     implementation(libs.material3)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-
+    implementation(libs.androidx.compose.material.icons)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

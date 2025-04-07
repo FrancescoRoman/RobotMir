@@ -1,4 +1,4 @@
-package com.example.mir100control.network
+package com.example.mir100control.core.network
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

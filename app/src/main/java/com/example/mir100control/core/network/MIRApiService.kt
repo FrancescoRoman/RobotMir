@@ -1,4 +1,4 @@
-package com.example.mir100control.network
+package com.example.mir100control.core.network
 
 import retrofit2.Call
 import retrofit2.http.*
@@ -10,6 +10,7 @@ interface MiRApiService {
     fun getStatus(
         @Header("Authorization") auth: String
     ): Call<MiRStatus>
+
     @GET("missions")
     fun getMissions(
         @Header("Authorization") auth: String
@@ -25,5 +26,10 @@ interface MiRApiService {
     fun clearQueue(
         @Header("Authorization") auth: String
     ): Call<Void>
-}
 
+
+
+
+
+
+}

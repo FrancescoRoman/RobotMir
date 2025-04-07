@@ -28,7 +28,6 @@
             </intent-filter>
         </activity>
 
-        <!-- Aggiunte le nuove Activity -->
         <activity android:name=".MirStatusActivity"/>
         <activity android:name=".MissionListActivity"/>
         <activity android:name=".MissionQueueActivity"/>
